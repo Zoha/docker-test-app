@@ -2,16 +2,15 @@ name: Docker Build && CD
 
 on:
   push:
-    branches: [master]
     tags:
       - "v*.*.*"
   pull_request:
-    branches: [master]
     tags:
       - "v*.*.*"
 
 jobs:
   build_and_push_docker:
+    if: github.event.base_ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo 
@@ -34,18 +33,15 @@ jobs:
         id: meta
         uses: crazy-max/ghaction-docker-meta@v2
         with:
-          # list of Docker images to use as base name for tags
           images: |
             name/app
             ghcr.io/username/app
-          # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}.{{minor}}.{{patch}}
             type=semver,pattern={{major}}
             type=sha
 
