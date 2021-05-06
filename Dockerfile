@@ -7,7 +7,7 @@ COPY yarn.lock /usr/src/app/yarn.lock
 
 RUN yarn install
 
-EXPOSE ${PORT:-3005}
+EXPOSE ${PORT:-3000}
 
 COPY . /usr/src/app
 
