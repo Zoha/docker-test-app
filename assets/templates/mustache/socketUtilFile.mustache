@@ -1,0 +1,19 @@
+const config = require("@config")
+const socket = require("socket.io")
+const { corsOptions } = require("./init/initCors")
+const socketsManager = require("@sockets/index")
+
+const exportObject = {
+  io: null
+}
+
+module.exports = exportObject
+module.exports.init = async http => {
+  // @ts-ignore
+  exportObject.io = await socket(http, {
+    path: config.socketPath,
+    // @ts-ignore
+    cors: corsOptions
+  })
+  socketsManager(exportObject.io)
+}

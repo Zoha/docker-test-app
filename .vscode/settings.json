@@ -1,0 +1,15 @@
+{
+  "cSpell.words": [
+    "gitkeep",
+    "hdel",
+    "hget",
+    "hgetall",
+    "hmset",
+    "hset",
+    "mongodb",
+    "printf",
+    "ucfirst",
+    "validatorjs"
+  ],
+  "js/ts.implicitProjectConfig.checkJs": true
+}
