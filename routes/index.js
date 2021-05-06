@@ -2,7 +2,7 @@ const router = require("express").Router()
 
 router.get("/", (req, res) => {
   res.send({
-    message: "app is running"
+    message: "app is running."
   })
 })
 
