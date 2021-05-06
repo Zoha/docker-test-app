@@ -1,13 +1,17 @@
-name: Docker Build
+name: Docker Build && CD
 
 on:
   push:
     branches: [master]
+    tags:
+      - "v*.*.*"
   pull_request:
     branches: [master]
+    tags:
+      - "v*.*.*"
 
 jobs:
-  build:
+  build_and_push_docker:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo 
