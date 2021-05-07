@@ -41,3 +41,5 @@ services:
 volumes:
   mongo-data:
   redis-data:
+networks:
+  docker-test-app-network:
