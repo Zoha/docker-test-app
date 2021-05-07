@@ -38,6 +38,8 @@ services:
       - app-net
 volumes:
   mongo-data:
+    driver: local
   redis-data:
+    driver: local
 networks:
   app-net:
