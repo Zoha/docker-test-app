@@ -1,0 +1,41 @@
+version: "3"
+services:
+  # add front here
+  api:
+    container_name: api
+    restart: always
+    image: zohabanam/docker-test-app:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    replicas: 3
+    networks:
+      - docker-test-app-network
+
+  redis:
+    container_name: redis
+    image: redis:5
+    restart: always
+    volumes:
+      - redis-data:/data
+    networks:
+      - docker-test-app-network
+
+  mongo:
+    container_name: mongo
+    image: mongo:3.6
+    restart: always
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /dev/null
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    command: mongod --smallfiles --logpath=/dev/null
+    networks:
+      - docker-test-app-network
+volumes:
+  mongo-data:
+  redis-data:
