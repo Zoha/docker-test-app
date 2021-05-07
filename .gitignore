@@ -5,3 +5,4 @@ yarn-error.log
 *.rar
 storage/logs/*
 !storage/logs/.gitkeep
+todo.txt
