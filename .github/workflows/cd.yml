@@ -2,8 +2,6 @@ name: Docker Build && CD
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "v*.*.*"
   pull_request:
@@ -12,6 +10,7 @@ on:
 
 jobs:
   build_and_push_docker:
+    if: ${{ github.ref === "refs/heads/master" }}
     runs-on: ubuntu-latest
     steps:
       - env:
