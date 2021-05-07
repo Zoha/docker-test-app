@@ -13,7 +13,7 @@ services:
       mode: replicated
       replicas: 3
     networks:
-      - docker-test-app-network
+      - app-net
 
   redis:
     container_name: redis
@@ -22,7 +22,9 @@ services:
     volumes:
       - redis-data:/data
     networks:
-      - docker-test-app-network
+      - app-net
+    environment:
+      MONGODB_URI: mongodb://app-net:27017/base
 
   mongo:
     container_name: mongo
@@ -37,9 +39,9 @@ services:
       - "27017:27017"
     command: mongod --smallfiles --logpath=/dev/null
     networks:
-      - docker-test-app-network
+      - app-net
 volumes:
   mongo-data:
   redis-data:
 networks:
-  docker-test-app-network:
+  app-net:
