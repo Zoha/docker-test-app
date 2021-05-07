@@ -1,6 +1,6 @@
 {
   "name": "base-api",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "base project api app",
   "main": "index.js",
   "author": "Zoha Banam <zoha.banam@gmail.com> (https://www.linkedin.com/in/zoha-banam-b91a951a5/)",
