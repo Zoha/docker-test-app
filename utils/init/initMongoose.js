@@ -7,6 +7,8 @@ mongoose.Promise = global.Promise
 mongoose.set("useCreateIndex", true)
 mongoose.set("useFindAndModify", false)
 
+console.log(config.mongodbUri)
+
 const connectionUri =
   config.nodeEnv == environments.test ? config.mongodbUriTest : config.mongodbUri
 
