@@ -37,7 +37,6 @@ services:
       MONGO_LOG_DIR: /dev/null
     volumes:
       - mongo-data:/data/db
-    command: mongod --smallfiles --logpath=/dev/null
     networks:
       - app-net
 volumes:
