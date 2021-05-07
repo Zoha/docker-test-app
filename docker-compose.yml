@@ -12,6 +12,8 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+    environment:
+      MONGODB_URI: mongodb://app-net:27017/base
     networks:
       - app-net
 
@@ -23,9 +25,6 @@ services:
       - redis-data:/data
     networks:
       - app-net
-    environment:
-      MONGODB_URI: mongodb://app-net:27017/base
-
   mongo:
     container_name: mongo
     image: mongo:3.6
