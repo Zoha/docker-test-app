@@ -1,10 +1,11 @@
 FROM node:14.16.1
 
-WORKDIR /usr/src/app
-
 COPY package.json /tmp/package.json
 COPY yarn.lock /tmp/yarn.lock
 RUN cd /tmp && npm install
+
+WORKDIR /usr/src/app
+
 RUN cp -a /tmp/node_modules ./
 
 RUN yarn install
