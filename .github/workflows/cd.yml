@@ -24,20 +24,12 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
-      - name: Docker meta
+       -
+        name: Docker meta
         id: meta
         uses: crazy-max/ghaction-docker-meta@v2
         with:
-          images: |
-            zohabanam/docker-test-app
-          tags: |
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
+          images: zohabnam/docker-test-app
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
