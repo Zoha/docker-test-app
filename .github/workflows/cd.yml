@@ -14,7 +14,9 @@ jobs:
   build_and_push_docker:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ toJson(github) }}"
+      - env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       # - name: Check Out Repo
       #   uses: actions/checkout@v2
       # - name: Cache Docker layers
