@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "buildx",
+    "ghaction",
     "gitkeep",
     "hdel",
     "hget",
@@ -9,6 +10,8 @@
     "hset",
     "mongodb",
     "printf",
+    "qemu",
+    "semver",
     "simplewhale",
     "ucfirst",
     "validatorjs"
