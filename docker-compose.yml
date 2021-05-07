@@ -9,7 +9,9 @@ services:
       - "3000:3000"
     depends_on:
       - redis
-    replicas: 3
+    deploy:
+      mode: replicated
+      replicas: 3
     networks:
       - docker-test-app-network
 
