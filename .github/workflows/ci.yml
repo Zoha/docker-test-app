@@ -2,10 +2,10 @@ name: Node.js CI
 
 on:
   push:
-    branches: [master,development]
+    branches: [master, development]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     strategy:
@@ -45,4 +45,3 @@ jobs:
         run: yarn test
         env:
           CI: true
-

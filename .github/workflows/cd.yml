@@ -9,8 +9,48 @@ on:
       - "v*.*.*"
 
 jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+        mongodb-version: [4.2]
+        redis-version: [5]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.3.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.2.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
+      - name: Install dependencies
+        run: yarn install
+      - name: Run tests
+        run: yarn test
+        env:
+          CI: true
   build_and_push_docker:
     runs-on: ubuntu-latest
+    needs: ci
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,7 +66,7 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v2
         with:
           images: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/docker-test-app
+            ${{ secrets.DOCKER_HUB_USERNAME }}/docket-test-app
           tags: |
             type=schedule
             type=ref,event=branch
@@ -55,20 +95,22 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-  # pull_an_rul_on_server:
-  #   runs-on: ubuntu-latest
-  #   needs: build_and_push_docker
-  #   steps:
-  #     - name: SSH and execute commands
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.SERVER_HOST }}
-  #         username: ${{ secrets.SERVER_USERNAME }}
-  #         password: ${{ secrets.SERVER_PASSWORD }}
-  #         port: ${{ secrets.SERVER_PORT }}
-  #         script: |
-  #           sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/docker-test-app:latest
-  #           cd docker-test-app
-  #           sudo rm -rf api
-  #           ${{ secrets.CLONE_SCRIPT}}
-  #           sudo stack deploy -c stack-compose.yml docker-test-app
+  pull_an_rul_on_server:
+    runs-on: ubuntu-latest
+    needs: build_and_push_docker
+    steps:
+      - name: SSH and execute commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd ~
+            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/docker-test-app:latest
+            sudo mkdir -p my-app && cd my-app
+            sudo rm -rf api
+            sudo git clone https://github.com/zoha/docker-test-app.git api
+            cd api
+            sudo docker stack deploy -c docker-compose.yml my-app

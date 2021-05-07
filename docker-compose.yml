@@ -6,7 +6,7 @@ services:
     restart: always
     image: zohabanam/docker-test-app:latest
     ports:
-      - "3000:3000"
+      - "3005:3005"
     deploy:
       mode: replicated
       replicas: 3
@@ -14,30 +14,31 @@ services:
       - mongo
       - redis
     environment:
+      PORT: 3005
       MONGODB_URI: mongodb://mongo:27017/base
+      REDIS_HOST: redis
+      NODE_ENV: production
     networks:
-      - app-net
+      - api
 
   redis:
     container_name: redis
     image: redis:5
     restart: always
     volumes:
-      - redis-data:/data
+      - redis:/data
     networks:
-      - app-net
+      - api
   mongo:
     container_name: mongo
-    image: mongo:4.2
+    image: mongo:4.4
     restart: always
     volumes:
-      - mongo-data:/data/db
-    ports:
-      - 27017:27017
+      - mongo:/data/db
     networks:
-      - app-net
+      - api
 volumes:
-  mongo-data:
-  redis-data:
+  mongo:
+  redis:
 networks:
-  app-net:
+  api:
